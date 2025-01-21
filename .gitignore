@@ -2,13 +2,13 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -71,3 +71,39 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Houdini Cache and Temp Files
+houdini_temp/
+houdini_temp_cache/
+$HOME/houdini_temp/
+$HOME/houdini16.5_temp/
+$HOME/houdini17.0_temp/
+
+# Houdini Backup Files
+*.hip~
+*.hiplc~
+*.hipnc~
+
+# Houdini Render Cache
+*.bgeo
+*.bgeo.sc
+*.vdb
+*.pic
+*.pic.gz
+
+# Houdini Simulation Cache
+*.sim
+*.simdata
+
+# Houdini Flipbook Images
+*.exr
+*.jpg
+*.png
+*.tiff
+
+# Houdini User Preferences
+$HOME/houdiniX.Y/
+
+# Other Houdini Files
+crash.*.log
+*.lock
