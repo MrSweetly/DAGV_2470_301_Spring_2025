@@ -147,7 +147,7 @@ Transform:
   m_GameObject: {fileID: 11168649}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.06, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -478,7 +478,7 @@ Transform:
   m_GameObject: {fileID: 630722596}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.35, y: 1.45, z: -2.29}
+  m_LocalPosition: {x: -1.48, y: 1.45, z: -2.29}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
-  direction: -1
+  direction: 0
 --- !u!54 &630722602
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1334,14 +1334,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1562283132}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: Play
+        m_MethodName: SetTrigger
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: WallStaticGrounded
+          m_StringArgument: WallInteract
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1380847130
@@ -1434,14 +1434,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1562283132}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: Play
+        m_MethodName: SetTrigger
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: WallFall
+          m_StringArgument: WallInteract
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!65 &1396936240
@@ -1527,6 +1527,7 @@ GameObject:
   - component: {fileID: 1453925309}
   - component: {fileID: 1453925308}
   - component: {fileID: 1453925307}
+  - component: {fileID: 1453925311}
   m_Layer: 0
   m_Name: Barriar
   m_TagString: Untagged
@@ -1590,6 +1591,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1453925311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1453925306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc2b3d9960377b47a43e225a802e5d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1562283132}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: WallInteract
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1482747282
 GameObject:
   m_ObjectHideFlags: 0
