@@ -1,41 +1,43 @@
 using UnityEngine;
-using System.Collections;
 
 public class MoveX : MonoBehaviour
 {
     public float speed = 5f;
     public int direction = 1;
+    private Rigidbody rb;
+
     private bool isMoving = true;
-    private bool collisionResolved = false;
 
     private void Start()
     {
-        StartCoroutine(MoveContinuously());
-    }
-
-    private IEnumerator MoveContinuously()
-    {
-        while (true)
+        rb = GetComponent<Rigidbody>();
+        if (rb == null)
         {
-            switch (isMoving)
-            {
-                case true:
-                    var moveAmount = direction * speed * Time.deltaTime;
-                    transform.Translate(moveAmount, 0, 0);
-                    break;
-                
-                case false:
-                    break;
-            }
-            // End of switch
-            yield return null;
+            Debug.LogError("Rigidbody component is missing. Please add a Rigidbody to the object.");
         }
-        // End of while
+        // End of if
     }
 
-    private void OnCollisionEnter(Collision collision) {
-        isMoving = false; }
+    private void FixedUpdate()
+    {
+        if (rb && isMoving)
+        {
+            Vector3 moveAmount = new Vector3(direction * speed, 0, 0);
+            rb.MovePosition(rb.position + moveAmount * Time.fixedDeltaTime);
+        }
+        // End of if
+    }
+    // End of FixedUpdate
 
-    private void OnCollisionExit(Collision collision) {
-        isMoving = true; }
+    private void OnCollisionEnter(Collision collision)
+    {
+        isMoving = false;
+    }
+    // End of OnCollisionEnter
+
+    private void OnCollisionExit(Collision collision)
+    {
+        isMoving = true;
+    }
+    // End of OnCollisionExit
 }

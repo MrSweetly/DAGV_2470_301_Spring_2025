@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\DestoryOnTrigger.cs" />
+    <Compile Include="Assets\Scripts\EnemySpawner.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObjects.cs" />
     <Compile Include="Assets\Scripts\SimpleTriggerEventBehavior.cs" />
     <Compile Include="Assets\Scripts\GameAction.cs" />
     <Compile Include="Assets\Scripts\MoveX.cs" />
