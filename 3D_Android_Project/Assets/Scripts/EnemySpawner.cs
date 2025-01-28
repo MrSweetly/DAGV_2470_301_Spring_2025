@@ -1,29 +1,60 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab;       // The enemy prefab to spawn
-    public Vector3Object spawnPosition; // ScriptableObject holding the spawn position
-    public float spawnInterval = 2f;    // Time between spawns
+    public WavePattern wavePattern;
+    public Vector3Object spawnPosition;
+
+    private WavePattern runtimeWavePattern;
+    private float totalEnemies;
+    private float elapsedTime;
 
     private void Start()
     {
-        // Check if the spawnPosition ScriptableObject is assigned
         if (spawnPosition == null)
         {
             Debug.LogError("Spawn position ScriptableObject is not assigned!");
             return;
         }
+        if (wavePattern == null)
+        {
+            Debug.LogError("WavePattern ScriptableObject is not assigned!");
+            return;
+        }
 
-        // Start spawning enemies repeatedly
-        InvokeRepeating(nameof(SpawnEnemy), 0f, spawnInterval);
+        // Create a runtime copy of the WavePattern to preserve the original values
+        runtimeWavePattern = Instantiate(wavePattern);
+
+        totalEnemies = 0;
+        foreach (var enemy in runtimeWavePattern.enemiesToSpawn)
+        {
+            totalEnemies += enemy.count;
+        }
+
+        StartCoroutine(SpawnEnemiesOverTime());
     }
 
-    private void SpawnEnemy()
+    private IEnumerator SpawnEnemiesOverTime()
     {
-        if (spawnPosition == null) return;
+        float spawnRate = runtimeWavePattern.spawnDuration / totalEnemies;
+        int index = 0;
 
-        // Spawn the enemy at the position defined by the Vector3Object ScriptableObject
-        Instantiate(enemyPrefab, spawnPosition.value, Quaternion.identity);
+        while (elapsedTime < runtimeWavePattern.spawnDuration)
+        {
+            if (index >= runtimeWavePattern.enemiesToSpawn.Count) break;
+
+            var currentEnemy = runtimeWavePattern.enemiesToSpawn[index];
+
+            if (currentEnemy.count > 0)
+            {
+                Instantiate(currentEnemy.enemyPrefab, spawnPosition.value, Quaternion.identity);
+                currentEnemy.count--;
+                elapsedTime += spawnRate;
+                yield return new WaitForSeconds(spawnRate);
+            }
+
+            if (currentEnemy.count == 0) index++;
+        }
     }
 }
