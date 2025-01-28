@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemiesToSpawn:
   - enemyPrefab: {fileID: 4081099154724036318, guid: 7b171368a75229648a0cee0864e58025, type: 3}
-    count: 1
+    count: 2
   - enemyPrefab: {fileID: 4081099154724036318, guid: 89f70814cae4bd543badbb1106a48ac0, type: 3}
     count: 1
   - enemyPrefab: {fileID: 4081099154724036318, guid: 7b171368a75229648a0cee0864e58025, type: 3}
