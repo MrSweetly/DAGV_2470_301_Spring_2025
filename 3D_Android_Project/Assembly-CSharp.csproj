@@ -47,17 +47,17 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\DestoryOnTrigger.cs" />
     <Compile Include="Assets\Scripts\TowerBehavior.cs" />
-    <Compile Include="Assets\Scripts\WavePattern.cs" />
+    <Compile Include="Assets\Scripts\Scriptables\ScriptableObjects.cs" />
+    <Compile Include="Assets\Scripts\Actions\GameAction.cs" />
     <Compile Include="Assets\Scripts\EnemySpawner.cs" />
-    <Compile Include="Assets\Scripts\ScriptableObjects.cs" />
     <Compile Include="Assets\Scripts\SimpleTriggerEventBehavior.cs" />
-    <Compile Include="Assets\Scripts\GameAction.cs" />
     <Compile Include="Assets\Scripts\TowerEnemy.cs" />
     <Compile Include="Assets\Scripts\WallBehavior.cs" />
     <Compile Include="Assets\Scripts\BulletBehavior.cs" />
     <Compile Include="Assets\Scripts\ImageFillBehavior.cs" />
+    <Compile Include="Assets\Scripts\Scriptables\WavePattern.cs" />
     <Compile Include="Assets\Scripts\TriggerGameActionBehavior.cs" />
-    <Compile Include="Assets\Scripts\GameActionHandler.cs" />
+    <Compile Include="Assets\Scripts\Actions\GameActionHandler.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
