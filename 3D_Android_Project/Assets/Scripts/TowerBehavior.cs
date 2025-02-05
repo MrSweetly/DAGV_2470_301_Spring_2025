@@ -7,27 +7,33 @@ public class TowerBehavior : MonoBehaviour
     public GameObject bulletPrefab;
     public Transform firePoint;
     public float range = 5f;
+    public int laneID;
 
     private List<GameObject> enemiesInRange = new List<GameObject>();
     private float nextFireTime;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        TowerEnemy enemy = other.GetComponent<TowerEnemy>();
+        if (enemy != null && enemy.laneID == laneID)
+        {
             enemiesInRange.Add(other.gameObject);
+        }
+        // End of if
     }
-    // End of if
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Enemy"))
+        {
             enemiesInRange.Remove(other.gameObject);
+        }
+        // End of if
     }
-    // End of if
 
     void Update()
     {
-        enemiesInRange.RemoveAll(enemy => enemy == null);
+        enemiesInRange.RemoveAll(enemy => !enemy);
 
         if (enemiesInRange.Count > 0 && Time.time >= nextFireTime)
         {
@@ -36,26 +42,30 @@ public class TowerBehavior : MonoBehaviour
         }
         // End of if
     }
-    // End of Update
 
+    // ReSharper disable Unity.PerformanceAnalysis
     void FireAtEnemy()
     {
         if (enemiesInRange.Count == 0) return;
         // End of if
 
         // Remove any null or destroyed enemies before targeting
-        enemiesInRange.RemoveAll(enemy => enemy == null || enemy.GetComponent<TowerEnemy>().health <= 0);
-    
-        if (enemiesInRange.Count == 0) return; // If no valid enemies, stop shooting
+        enemiesInRange.RemoveAll(enemy => !enemy || enemy.GetComponent<TowerEnemy>().health <= 0);
+
+        if (enemiesInRange.Count == 0) return;
         // End of if
 
-        GameObject target = enemiesInRange[0]; // Get the first valid enemy
+        GameObject target = enemiesInRange[0];
 
-        if (target == null) return; // Extra safety check
+        if (target == null) return;
+        // End of if
+
+        // Ensure tower doesn't fire at enemies behind it
+        if (target.transform.position.x < transform.position.x) return;
         // End of if
 
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-    
+
         BulletBehavior bulletScript = bullet.GetComponent<BulletBehavior>();
         if (bulletScript != null)
         {
@@ -67,5 +77,4 @@ public class TowerBehavior : MonoBehaviour
         }
         // End of if else
     }
-    // End of FireAtEnemy
 }

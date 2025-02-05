@@ -7,6 +7,7 @@ public class TowerEnemy : MonoBehaviour
     public int direction = 1;
     public int damage = 10;
     public float attackRate = 1f;
+    public int laneID; // Assign a lane to the enemy
 
     private Rigidbody rb;
     private bool isMoving = true;
@@ -22,18 +23,22 @@ public class TowerEnemy : MonoBehaviour
         }
         // End of if
     }
-    // End of Start
+
+    public void SetLane(int lane) 
+    {
+        laneID = lane; // Set lane when spawned
+    }
+
 
     private void FixedUpdate()
     {
-        if (rb && isMoving && targetWall == null)
+        if (rb && isMoving && !targetWall)
         {
             Vector3 moveAmount = new Vector3(direction * speed, 0, 0);
             rb.MovePosition(rb.position + moveAmount * Time.fixedDeltaTime);
         }
         // End of if
     }
-    // End of FixedUpdate
 
     private void OnTriggerEnter(Collider other)
     {
@@ -44,7 +49,6 @@ public class TowerEnemy : MonoBehaviour
         }
         // End of if
     }
-    // End of OnTriggerEnter
 
     private void OnTriggerStay(Collider other)
     {
@@ -55,7 +59,6 @@ public class TowerEnemy : MonoBehaviour
         }
         // End of if
     }
-    // End of OnTriggerStay
 
     private void OnTriggerExit(Collider other)
     {
@@ -66,16 +69,19 @@ public class TowerEnemy : MonoBehaviour
         }
         // End of if
     }
-    // End of OnTriggerExit
 
     public void TakeDamage(int damageAmount)
     {
         health -= damageAmount;
+
         if (health <= 0)
         {
+            if (EnemyManager.Instance) 
+            {
+                EnemyManager.Instance.EnemyDied();
+            }
+
             Destroy(gameObject);
         }
-        // End of if
     }
-    // End of TakeDamage
 }

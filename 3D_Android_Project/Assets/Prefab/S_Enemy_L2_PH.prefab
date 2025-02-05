@@ -151,3 +151,4 @@ MonoBehaviour:
   direction: -1
   damage: 5
   attackRate: 3
+  laneID: 1

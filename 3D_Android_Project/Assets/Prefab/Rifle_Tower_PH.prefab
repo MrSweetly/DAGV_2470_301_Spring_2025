@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7629547087496988618}
   - component: {fileID: 2073110757617688627}
   - component: {fileID: 7644409354013282001}
-  - component: {fileID: 758923943417381460}
+  - component: {fileID: 8292364764143932552}
   m_Layer: 0
   m_Name: Rifle_Tower_PH
   m_TagString: Untagged
@@ -125,8 +125,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4532172314222934631, guid: 30b1f770644d0ca4093a8276fe789e6e, type: 3}
   firePoint: {fileID: 2542263103476680303}
   range: 3
---- !u!135 &758923943417381460
-SphereCollider:
+  laneID: 2
+--- !u!65 &8292364764143932552
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -140,9 +141,9 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 15
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 15.806723, y: 2, z: 1}
+  m_Center: {x: 8.403363, y: -1.8, z: 0}
