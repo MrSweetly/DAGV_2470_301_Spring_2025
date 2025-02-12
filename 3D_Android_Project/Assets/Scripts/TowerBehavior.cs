@@ -15,11 +15,10 @@ public class TowerBehavior : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         TowerEnemy enemy = other.GetComponent<TowerEnemy>();
-        if (enemy != null && enemy.laneID == laneID)
+        if (enemy != null && enemy.laneID == laneID) // Only add enemies in the same lane
         {
             enemiesInRange.Add(other.gameObject);
         }
-        // End of if
     }
 
     private void OnTriggerExit(Collider other)
@@ -40,7 +39,6 @@ public class TowerBehavior : MonoBehaviour
             FireAtEnemy();
             nextFireTime = Time.time + 1f / fireRate;
         }
-        // End of if
     }
 
     // ReSharper disable Unity.PerformanceAnalysis

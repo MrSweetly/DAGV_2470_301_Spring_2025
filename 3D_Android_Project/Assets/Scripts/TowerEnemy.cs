@@ -4,6 +4,7 @@ public class TowerEnemy : MonoBehaviour
 {
     public int health = 50;
     public float speed = 5f;
+    private float originalSpeed;
     public int direction = 1;
     public int damage = 10;
     public float attackRate = 1f;
@@ -22,6 +23,7 @@ public class TowerEnemy : MonoBehaviour
             Debug.LogError("Rigidbody component is missing. Please add a Rigidbody to the object.");
         }
         // End of if
+        originalSpeed = speed;
     }
 
     public void SetLane(int lane) 
@@ -83,5 +85,15 @@ public class TowerEnemy : MonoBehaviour
 
             Destroy(gameObject);
         }
+    }
+    
+    public void SlowDown(float factor)
+    {
+        speed = originalSpeed * factor; // Reduce speed
+    }
+
+    public void ResetSpeed()
+    {
+        speed = originalSpeed; // Restore original speed
     }
 }

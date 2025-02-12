@@ -1,15 +1,19 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using TMPro; // For UI text
 
 public class EnemySpawner : MonoBehaviour
 {
-    public List<WavePattern> wavePatterns; // Support multiple waves
-    public List<Vector3Object> spawnPositions; // List of spawn locations as ScriptableObjects
+    public static EnemySpawner instance;
+    public List<WavePattern> wavePatterns;
+    public List<Vector3Object> spawnPositions;
+    public TextMeshProUGUI countdownText; // Reference to UI countdown
 
     private int totalEnemies;
     private int spawnedEnemies;
     private List<WavePattern> runtimeWavePatterns;
+    private float countdown = 5f; // 5-second timer before starting the round
 
     private void Start()
     {
@@ -18,13 +22,11 @@ public class EnemySpawner : MonoBehaviour
             Debug.LogError("No spawn positions assigned!");
             return;
         }
-        // End of if
         if (wavePatterns == null || wavePatterns.Count == 0)
         {
             Debug.LogError("WavePatterns are not assigned!");
             return;
         }
-        // End of if
 
         // Create runtime copies to preserve original data
         runtimeWavePatterns = new List<WavePattern>();
@@ -32,7 +34,6 @@ public class EnemySpawner : MonoBehaviour
         {
             runtimeWavePatterns.Add(Instantiate(wavePattern)); // Copy each wave
         }
-        // End of foreach
 
         // Sum all enemies from copied WavePatterns
         totalEnemies = 0;
@@ -42,27 +43,57 @@ public class EnemySpawner : MonoBehaviour
             {
                 totalEnemies += enemy.count;
             }
-            // End of foreach
         }
-        // End of foreach
 
-        // Notify EnemyManager about the correct total enemy count
+        // Notify EnemyManager about total enemy count
         EnemyManager.Instance.SetTotalEnemies(totalEnemies);
 
+        // Start countdown before spawning waves
+        StartCoroutine(StartCountdown());
+    }
+
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+    }
+
+    // **New Coroutine for Countdown Timer**
+    private IEnumerator StartCountdown()
+    {
+        while (countdown > 0)
+        {
+            if (countdownText != null)
+            {
+                countdownText.text = "Wave starts in: " + Mathf.Ceil(countdown).ToString();
+            }
+            yield return new WaitForSeconds(1f);
+            countdown -= 1f;
+        }
+
+        if (countdownText != null)
+        {
+            countdownText.text = "GO!";
+            yield return new WaitForSeconds(1f);
+            countdownText.text = ""; // Clear text after countdown
+        }
+
+        // Start enemy spawning after countdown
         StartCoroutine(SpawnAllWaves());
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
     private IEnumerator SpawnAllWaves()
     {
-        foreach (var wavePattern in runtimeWavePatterns) // Use copies, not originals
+        foreach (var wavePattern in runtimeWavePatterns)
         {
             yield return StartCoroutine(SpawnEnemiesOverTime(wavePattern));
         }
-        // End of foreach
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
     private IEnumerator SpawnEnemiesOverTime(WavePattern wavePattern)
     {
         float spawnRate = wavePattern.spawnDuration / totalEnemies;
@@ -74,29 +105,23 @@ public class EnemySpawner : MonoBehaviour
 
             if (currentEnemy.count > 0)
             {
-                // Choose a random lane
                 int laneIndex = Random.Range(0, spawnPositions.Count);
                 Vector3 spawnPos = spawnPositions[laneIndex].value;
 
-                // Spawn enemy and assign lane
                 GameObject enemyObj = Instantiate(currentEnemy.enemyPrefab, spawnPos, Quaternion.identity);
                 TowerEnemy enemy = enemyObj.GetComponent<TowerEnemy>();
                 if (enemy != null)
                 {
-                    enemy.SetLane(laneIndex); // Assign correct lane
+                    enemy.SetLane(laneIndex);
                 }
-                // End of if
 
                 spawnedEnemies++;
                 currentEnemy.count--;
 
                 yield return new WaitForSeconds(spawnRate);
             }
-            // End of if
 
             if (currentEnemy.count == 0) index++;
-            // End of if
         }
-        // End of while
     }
 }

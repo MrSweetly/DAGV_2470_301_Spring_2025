@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8292364764143932552}
   m_Layer: 0
   m_Name: Rifle_Tower_PH
-  m_TagString: Untagged
+  m_TagString: Turrets
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
