@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: M_Spawn_Local
   m_EditorClassIdentifier: Assembly-CSharp::Vector3Object
-  value: {x: 12, y: 1.45, z: -2.5}
+  value: {x: 12, y: 1.45, z: -2}
