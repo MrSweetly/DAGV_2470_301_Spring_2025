@@ -31,6 +31,11 @@ public class NodeControl : MonoBehaviour
         rend.enabled = false;
     }
 
+    public Vector3 GetBuildPosition()
+    {
+        return transform.position + postionOffet;
+    }
+
     // Method to start blinking when triggered by the Shop
     public void StartBlinking()
     {
@@ -50,7 +55,13 @@ public class NodeControl : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (buildManager.GetTurretToBuild() == null || turret != null) // Prevent placement if no turret selected or already placed
+        if (buildManager.GetTurretToBuild() == null)
+        {
+            buildManager.SelectNode(this);
+            return;
+        }
+
+        if (turret != null)
         {
             return;
         }

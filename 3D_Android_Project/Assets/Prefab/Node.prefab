@@ -100,7 +100,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -121,3 +121,5 @@ MonoBehaviour:
   hoverColor: {r: 0.95686275, g: 1, b: 0.46666667, a: 0}
   blinkSpeed: 0.5
   postionOffet: {x: 0, y: 0.8, z: 0}
+  sellButtonPrefab: {fileID: 4811828603922326520, guid: bdd720cddc7aa8b449182624d92d2151, type: 3}
+  buttonParent: {fileID: 0}

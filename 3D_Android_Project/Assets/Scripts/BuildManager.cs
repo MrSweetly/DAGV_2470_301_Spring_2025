@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI; // Required for UI elements
 
 public class BuildManager : MonoBehaviour
 {
@@ -18,20 +17,44 @@ public class BuildManager : MonoBehaviour
     public GameObject rifleTurretPrefab;
     public GameObject sniperTurretPrefab;
     public GameObject barricadeTowerPrefab;
+    
+    public NodeUI nodeUI;
 
     private GameObject turretToBuild;
+    private NodeControl selectedNode;
 
     // Reference to the Cancel button UI
     public GameObject cancelButton;
-
+    
     public GameObject GetTurretToBuild()
     {
         return turretToBuild;
     }
 
+    public void SelectNode(NodeControl node)
+    {
+        if (selectedNode == node)
+        {
+            DeselectNode();
+            return;
+        }
+        
+        selectedNode = node;
+        turretToBuild = null;
+
+        nodeUI.SetTarget(node);
+    }
+
+    public void DeselectNode()
+    {
+        selectedNode = null;
+        nodeUI.Hide();
+    }
+
     public void SetTurretToBuild(GameObject turret)
     {
         turretToBuild = turret;
+        DeselectNode();
 
         // Show Cancel button only if a turret is selected
         if (cancelButton != null)
@@ -63,4 +86,5 @@ public class BuildManager : MonoBehaviour
 
         Debug.Log("Turret selection canceled.");
     }
+    
 }
