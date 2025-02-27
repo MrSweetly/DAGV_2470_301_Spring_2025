@@ -12,7 +12,7 @@ public class NodeControl : MonoBehaviour
     private Color originalColor;
     private bool isBlinking = false;
     private Coroutine blinkCoroutine;
-    private GameObject turret;
+    private GameObject turret; // The turret placed on this node
 
     BuildManager buildManager;
 
@@ -36,6 +36,11 @@ public class NodeControl : MonoBehaviour
         return transform.position + postionOffet;
     }
 
+    public bool HasTurret()
+    {
+        return turret != null;  // Return true if the node has a turret
+    }
+
     // Method to start blinking when triggered by the Shop
     public void StartBlinking()
     {
@@ -52,7 +57,6 @@ public class NodeControl : MonoBehaviour
         }
     }
 
-
     private void OnMouseDown()
     {
         if (buildManager.GetTurretToBuild() == null)
@@ -61,7 +65,7 @@ public class NodeControl : MonoBehaviour
             return;
         }
 
-        if (turret != null)
+        if (turret != null)  // Prevent placing another turret if one is already on this node
         {
             return;
         }

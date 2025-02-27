@@ -25,7 +25,15 @@ public class BuildManager : MonoBehaviour
 
     // Reference to the Cancel button UI
     public GameObject cancelButton;
-    
+
+    // Reference to turret selection buttons
+    public GameObject rifleButton;
+    public GameObject sniperButton;
+    public GameObject barricadeButton;
+
+    // Store the RectTransform of the selected button for positioning
+    private RectTransform selectedButtonRectTransform;
+
     public GameObject GetTurretToBuild()
     {
         return turretToBuild;
@@ -60,6 +68,23 @@ public class BuildManager : MonoBehaviour
         if (cancelButton != null)
         {
             cancelButton.SetActive(turret != null);
+
+            // Set the Cancel button's position based on the selected turret button
+            if (turret != null)
+            {
+                if (turret == rifleTurretPrefab)
+                {
+                    SetCancelButtonPosition(rifleButton);
+                }
+                else if (turret == sniperTurretPrefab)
+                {
+                    SetCancelButtonPosition(sniperButton);
+                }
+                else if (turret == barricadeTowerPrefab)
+                {
+                    SetCancelButtonPosition(barricadeButton);
+                }
+            }
         }
     }
 
@@ -86,5 +111,14 @@ public class BuildManager : MonoBehaviour
 
         Debug.Log("Turret selection canceled.");
     }
-    
+
+    // Method to set Cancel button position based on the turret button selected
+    private void SetCancelButtonPosition(GameObject turretButton)
+    {
+        if (turretButton != null)
+        {
+            selectedButtonRectTransform = turretButton.GetComponent<RectTransform>();
+            cancelButton.GetComponent<RectTransform>().position = selectedButtonRectTransform.position;
+        }
+    }
 }

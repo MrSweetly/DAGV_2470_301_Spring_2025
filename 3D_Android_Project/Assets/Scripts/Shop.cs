@@ -53,5 +53,4 @@ public class Shop : MonoBehaviour
             node.StartBlinking(); // Start blinking effect again
         }
     }
-
 }

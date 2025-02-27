@@ -4,21 +4,24 @@ using UnityEngine.SceneManagement; // Required for scene reloading
 
 public class EnemyManager : MonoBehaviour
 {
-    public static EnemyManager Instance; // Singleton instance
-    public Image enemyFillBar; // Assign in Inspector
+    public static EnemyManager Instance;
+    public Image enemyFillBar;
     private int totalEnemies;
     private int remainingEnemies;
+    public GameObject levelFinishedPanel;
+    public Button restartButton;
+    
+    private bool isGameOver = false;
 
-    public GameObject levelFinishedPanel; // Reference to Level Finished UI
-    public Button restartButton; // Restart button reference
+    public bool IsGameOver => isGameOver; // Public getter
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        levelFinishedPanel.SetActive(false); // Ensure it's hidden at start
-        restartButton.onClick.AddListener(RestartLevel); // Assign button action
+        levelFinishedPanel.SetActive(false);
+        restartButton.onClick.AddListener(RestartLevel);
     }
 
     public void SetTotalEnemies(int total)
@@ -33,7 +36,6 @@ public class EnemyManager : MonoBehaviour
         remainingEnemies--;
         UpdateFillBar();
 
-        // Check if all enemies are defeated
         if (remainingEnemies <= 0)
         {
             ShowLevelCompleteScreen();
@@ -50,13 +52,12 @@ public class EnemyManager : MonoBehaviour
 
     private void ShowLevelCompleteScreen()
     {
-        levelFinishedPanel.SetActive(true); // Show UI
+        isGameOver = true; // Set game over state
+        levelFinishedPanel.SetActive(true);
     }
 
     public void RestartLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Reload current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-    
-    
 }

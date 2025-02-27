@@ -104,8 +104,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 6, z: 1}
+  m_Center: {x: 0, y: 2.5, z: 0}
 --- !u!114 &8568309373874775177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,5 +121,3 @@ MonoBehaviour:
   hoverColor: {r: 0.95686275, g: 1, b: 0.46666667, a: 0}
   blinkSpeed: 0.5
   postionOffet: {x: 0, y: 0.8, z: 0}
-  sellButtonPrefab: {fileID: 4811828603922326520, guid: bdd720cddc7aa8b449182624d92d2151, type: 3}
-  buttonParent: {fileID: 0}

@@ -15,6 +15,8 @@ public class PauseManager : MonoBehaviour
     private Color pausedButtonColor = Color.red;   // When paused: Red background
     private Color pausedTextColor = Color.white;   // When paused: White text
 
+    public bool IsPaused => isPaused; // Public getter to access paused state
+
     void Start()
     {
         buttonImage = pauseButton.GetComponent<Image>(); // Get the button's Image component
