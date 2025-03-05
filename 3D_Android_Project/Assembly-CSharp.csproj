@@ -49,6 +49,7 @@
     <Compile Include="Assets\Scripts\TowerBehavior.cs" />
     <Compile Include="Assets\Scripts\Shop.cs" />
     <Compile Include="Assets\Scripts\PauseManager.cs" />
+    <Compile Include="Assets\Scripts\BlinkEffect.cs" />
     <Compile Include="Assets\Scripts\NodeUI.cs" />
     <Compile Include="Assets\Scripts\Scriptables\ScriptableObjects.cs" />
     <Compile Include="Assets\Scripts\Actions\GameAction.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Assets\Scripts\BuildManager.cs" />
     <Compile Include="Assets\NodeUi.cs" />
     <Compile Include="Assets\Scripts\BulletBehavior.cs" />
+    <Compile Include="Assets\Scripts\TowerPlacement.cs" />
     <Compile Include="Assets\Scripts\ImageFillBehavior.cs" />
     <Compile Include="Assets\Scripts\CameraFOVAdjuster.cs" />
     <Compile Include="Assets\Scripts\EnemyManager.cs" />

@@ -1,60 +1,63 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
 
 public class NodeControl : MonoBehaviour
 {
-    public Color hoverColor;
-    public float blinkSpeed = 0.5f; // Speed of the blinking effect
-    public Vector3 postionOffet;
+    public Vector3 positionOffset; // Offset for turret placement
 
     private Renderer rend;
     private Color originalColor;
-    private bool isBlinking = false;
-    private Coroutine blinkCoroutine;
-    private GameObject turret; // The turret placed on this node
+    private GameObject turret; 
+    private BuildManager buildManager;
+    private BlinkEffect blinkEffect;
+    private TowerPlacement turretPlacement;
 
-    BuildManager buildManager;
+    private static NodeControl[] allNodes; // Cache all nodes for efficiency
 
-    void Start()
+    private void Start()
     {
         rend = GetComponent<Renderer>();
         originalColor = rend.material.color;
-
+        
         buildManager = BuildManager.instance;
-        if (BuildManager.instance == null)
+        turretPlacement = GetComponent<TowerPlacement>();
+
+        if (buildManager == null)
         {
             Debug.LogError("BuildManager instance is missing!");
-        }
-
-        // Ensure MeshRenderer is disabled at the start (for your setup)
-        rend.enabled = false;
-    }
-
-    public Vector3 GetBuildPosition()
-    {
-        return transform.position + postionOffet;
-    }
-
-    public bool HasTurret()
-    {
-        return turret != null;  // Return true if the node has a turret
-    }
-
-    // Method to start blinking when triggered by the Shop
-    public void StartBlinking()
-    {
-        if (buildManager.GetTurretToBuild() == null || turret != null) // Prevent blinking if no turret is selected or turret is already placed
-        {
+            enabled = false; // Disable script if BuildManager is missing
             return;
         }
 
-        if (rend != null && !isBlinking) // Ensure it's not already blinking
+        // Cache BlinkEffect if available
+        if (!TryGetComponent(out blinkEffect))
         {
-            rend.enabled = true; // Enable the MeshRenderer
-            isBlinking = true;
-            blinkCoroutine = StartCoroutine(BlinkEffect());
+            Debug.LogError($"BlinkEffect component missing on {gameObject.name}");
         }
+
+        rend.enabled = false; // Disable renderer at start
+
+        // Cache all nodes once
+        if (allNodes == null || allNodes.Length == 0)
+        {
+            allNodes = FindObjectsOfType<NodeControl>();
+        }
+    }
+
+    public Vector3 GetBuildPosition() => transform.position + positionOffset;
+    public bool HasTurret() => turret != null;
+
+    public void StartBlinking()
+    {
+        if (turret == null && buildManager.GetTurretToBuild() != null) 
+        {
+            blinkEffect?.ToggleBlinking(true); // Uses a single toggle method for blinking
+        }
+    }
+
+    public void StopBlinking()
+    {
+        blinkEffect?.ToggleBlinking(false); // Stops blinking if running
     }
 
     private void OnMouseDown()
@@ -65,125 +68,35 @@ public class NodeControl : MonoBehaviour
             return;
         }
 
-        if (turret != null)  // Prevent placing another turret if one is already on this node
-        {
-            return;
-        }
-        
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            Debug.Log("Click ignored: UI element was clicked.");
-            return; // Prevent placing a turret when clicking UI
-        }
+        if (turret != null || EventSystem.current.IsPointerOverGameObject())
+            return; // Prevent placing if occupied or UI clicked
 
-        // LayerMask to check if we are clicking on the correct layer for nodes only
-        int layerMask = 1 << LayerMask.NameToLayer("Node"); // Ensure this layer is set to "Node" for your node objects
-        RaycastHit hit;
+        // Place turret
+        turret = turretPlacement.PlaceTurret(GetBuildPosition(), transform.rotation, this);
+        if (turret == null) return;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
-        {
-            // Proceed with placing the turret
-            GameObject turretToBuild = buildManager.GetTurretToBuild();
-            turret = Instantiate(turretToBuild, transform.position + postionOffet, transform.rotation);
-            
-            // **Set turret to Ignore Raycast layer**
-            turret.layer = LayerMask.NameToLayer("Ignore Raycast");
-
-            // Optionally, assign lane if required
-            int closestLane = GetClosestLane(transform.position);
-            TowerBehavior turretScript = turret.GetComponent<TowerBehavior>();
-            if (turretScript != null)
-            {
-                turretScript.laneID = closestLane;
-            }
-
-            // **Reset turret selection after building**
-            buildManager.SetTurretToBuild(null);
-
-            // Stop blinking after placing the turret
-            StopBlinking();
-
-            // Disable all node renderers after placement
-            DisableAllNodeRenderers();
-        }
+        buildManager.SetTurretToBuild(null);
+        StopBlinking();
+        DisableAllNodeRenderers();
     }
 
-    // Finds the closest lane to the node
-    private int GetClosestLane(Vector3 position)
+    private void OnMouseExit()
     {
-        int closestLane = 0;
-        float minDistance = float.MaxValue;
-
-        for (int i = 0; i < EnemySpawner.instance.spawnPositions.Count; i++)
+        if (!(blinkEffect?.IsBlinking() ?? false)) // If blinkEffect is null or not blinking
         {
-            float distance = Vector3.Distance(position, EnemySpawner.instance.spawnPositions[i].value);
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                closestLane = i;
-            }
-        }
-
-        return closestLane;
-    }
-
-    void OnMouseExit()
-    {
-        if (rend != null && !isBlinking) // Only turn off when not blinking
-        {
-            // Disable MeshRenderer when mouse exits
             rend.enabled = false;
-            if (blinkCoroutine != null)
-            {
-                StopCoroutine(blinkCoroutine);
-            }
-            isBlinking = false;
-            rend.material.color = originalColor; // Reset color
         }
     }
 
-    IEnumerator BlinkEffect()
-    {
-        while (isBlinking)
-        {
-            rend.material.color = hoverColor;
-            yield return new WaitForSeconds(blinkSpeed);
-            rend.material.color = originalColor;
-            yield return new WaitForSeconds(blinkSpeed);
-        }
-    }
-
-    // Method to stop blinking when a turret is placed
-    public void StopBlinking()
-    {
-        if (blinkCoroutine != null)
-        {
-            StopCoroutine(blinkCoroutine);
-        }
-        isBlinking = false;
-        rend.material.color = originalColor; // Reset color
-        rend.enabled = false; // Disable renderer after stopping blinking
-    }
-
-    // Disable MeshRenderers on all nodes after turret is placed
     private void DisableAllNodeRenderers()
     {
-        GameObject nodesParent = GameObject.Find("Nodes"); // Find the "Nodes" parent object in the scene
-        if (nodesParent == null)
-        {
-            Debug.LogError("No Nodes parent found in the scene!");
-            return;
-        }
+        // Refresh node cache if new nodes are added
+        allNodes = FindObjectsOfType<NodeControl>();
 
-        // Find all NodeControl components in the children of the "Nodes" parent object
-        NodeControl[] nodes = nodesParent.GetComponentsInChildren<NodeControl>();
-
-        foreach (NodeControl node in nodes)
+        foreach (var node in allNodes)
         {
-            node.rend.enabled = false; // Disable renderer on all nodes
-            node.StopBlinking(); // Ensure blinking is stopped on all nodes
+            node.rend.enabled = false;
+            node.StopBlinking();
         }
     }
 }

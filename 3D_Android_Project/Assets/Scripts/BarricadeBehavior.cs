@@ -4,19 +4,27 @@ public class BarricadeBehavior : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        TowerEnemy enemy = other.GetComponent<TowerEnemy>();
-        if (enemy != null)
+        if (other.CompareTag("Enemy"))
         {
-            enemy.SlowDown(0.5f); // Slow enemy to 50% speed
+            TowerEnemy enemy = other.GetComponent<TowerEnemy>();
+            if (enemy != null)
+            {
+                enemy.SlowDown(0.5f); // Slow down enemy to 50% speed
+                Debug.Log($"Enemy slowed down: {enemy.name}");
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        TowerEnemy enemy = other.GetComponent<TowerEnemy>();
-        if (enemy != null)
+        if (other.CompareTag("Enemy"))
         {
-            enemy.ResetSpeed(); // Restore original speed
+            TowerEnemy enemy = other.GetComponent<TowerEnemy>();
+            if (enemy != null)
+            {
+                enemy.ResetSpeed(); // Restore original speed
+                Debug.Log($"Enemy speed reset: {enemy.name}");
+            }
         }
     }
 }

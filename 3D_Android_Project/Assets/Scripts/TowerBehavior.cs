@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class TowerBehavior : MonoBehaviour
 {
@@ -7,15 +7,16 @@ public class TowerBehavior : MonoBehaviour
     public GameObject bulletPrefab;
     public Transform firePoint;
     public float range = 5f;
-    public int laneID;
 
     private List<GameObject> enemiesInRange = new List<GameObject>();
     private float nextFireTime;
 
+    // Removed laneID dependency
+
     private void OnTriggerEnter(Collider other)
     {
         TowerEnemy enemy = other.GetComponent<TowerEnemy>();
-        if (enemy != null && enemy.laneID == laneID) // Only add enemies in the same lane
+        if (enemy != null) // Add any enemy to the range regardless of lane
         {
             enemiesInRange.Add(other.gameObject);
         }
@@ -27,11 +28,11 @@ public class TowerBehavior : MonoBehaviour
         {
             enemiesInRange.Remove(other.gameObject);
         }
-        // End of if
     }
 
     void Update()
     {
+        // Clean up list, removing destroyed enemies
         enemiesInRange.RemoveAll(enemy => !enemy);
 
         if (enemiesInRange.Count > 0 && Time.time >= nextFireTime)
@@ -41,27 +42,20 @@ public class TowerBehavior : MonoBehaviour
         }
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
     void FireAtEnemy()
     {
         if (enemiesInRange.Count == 0) return;
-        // End of if
 
-        // Remove any null or destroyed enemies before targeting
+        // Remove null or destroyed enemies before targeting
         enemiesInRange.RemoveAll(enemy => !enemy || enemy.GetComponent<TowerEnemy>().health <= 0);
 
         if (enemiesInRange.Count == 0) return;
-        // End of if
 
-        GameObject target = enemiesInRange[0];
+        GameObject target = enemiesInRange[0]; // Choose the first valid enemy in range
 
         if (target == null) return;
-        // End of if
 
-        // Ensure tower doesn't fire at enemies behind it
-        if (target.transform.position.x < transform.position.x) return;
-        // End of if
-
+        // Instantiate the bullet at the firePoint and target the chosen enemy
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
 
         BulletBehavior bulletScript = bullet.GetComponent<BulletBehavior>();
@@ -73,6 +67,5 @@ public class TowerBehavior : MonoBehaviour
         {
             Debug.LogError("BulletBehavior is missing on the Bullet prefab!");
         }
-        // End of if else
     }
 }

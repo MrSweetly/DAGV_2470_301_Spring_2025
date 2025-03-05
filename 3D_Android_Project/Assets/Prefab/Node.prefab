@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 3382157322447658892}
   - component: {fileID: 4529446211207800026}
   - component: {fileID: 1173579670617689860}
+  - component: {fileID: 8498782265256921499}
   - component: {fileID: 8568309373874775177}
+  - component: {fileID: -1034170023230985720}
   m_Layer: 7
   m_Name: Node
   m_TagString: Untagged
@@ -106,6 +108,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 6, z: 1}
   m_Center: {x: 0, y: 2.5, z: 0}
+--- !u!114 &8498782265256921499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6216354821994435934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2518a4c985d7bbc46800db28ed8a74fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverColor: {r: 0.8268868, g: 1, b: 0.3075471, a: 0}
+  blinkSpeed: 0.5
 --- !u!114 &8568309373874775177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,6 +134,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f448db7ab25df40b02f6c2a4ab1589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverColor: {r: 0.95686275, g: 1, b: 0.46666667, a: 0}
-  blinkSpeed: 0.5
-  postionOffet: {x: 0, y: 0.8, z: 0}
+  positionOffset: {x: 0, y: 0.8, z: 0}
+--- !u!114 &-1034170023230985720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6216354821994435934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b56364c8b85ae15409e7f915f4dba714, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

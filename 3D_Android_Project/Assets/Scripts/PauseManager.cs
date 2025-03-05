@@ -1,13 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Only needed if using TextMeshPro
 
 public class PauseManager : MonoBehaviour
 {
     public Button pauseButton; // Assign in Inspector
-    public TextMeshProUGUI pauseText; // Assign in Inspector (if using TextMeshPro)
+    public Text pauseText; // Assign in Inspector (Legacy Text)
     private Image buttonImage; // Reference to button's background image
-    
+
     private bool isPaused = false;
 
     private Color normalButtonColor = Color.white; // Default: White background
@@ -20,10 +19,10 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         buttonImage = pauseButton.GetComponent<Image>(); // Get the button's Image component
-        
+
         // Assign button listener
         pauseButton.onClick.AddListener(TogglePause);
-        
+
         // Set initial colors
         UpdateButtonVisuals();
     }

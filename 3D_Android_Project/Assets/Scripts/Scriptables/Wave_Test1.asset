@@ -13,12 +13,16 @@ MonoBehaviour:
   m_Name: Wave_Test1
   m_EditorClassIdentifier: 
   enemiesToSpawn:
-  - enemyPrefab: {fileID: 4081099154724036318, guid: 7b171368a75229648a0cee0864e58025, type: 3}
+  - enemyPrefab: {fileID: 4081099154724036318, guid: 2866dba5f5bb0b64e9f3380af4f716ca, type: 3}
     count: 1
-  - enemyPrefab: {fileID: 4081099154724036318, guid: 89f70814cae4bd543badbb1106a48ac0, type: 3}
+    initialCount: 1
+  - enemyPrefab: {fileID: 4081099154724036318, guid: 7208871f164b337488e717ed5420cde4, type: 3}
     count: 1
-  - enemyPrefab: {fileID: 4081099154724036318, guid: 7b171368a75229648a0cee0864e58025, type: 3}
+    initialCount: 1
+  - enemyPrefab: {fileID: 4081099154724036318, guid: 2866dba5f5bb0b64e9f3380af4f716ca, type: 3}
     count: 1
-  - enemyPrefab: {fileID: 4081099154724036318, guid: af02348e1e4470742b04bad92b27d3cc, type: 3}
+    initialCount: 1
+  - enemyPrefab: {fileID: 4081099154724036318, guid: d53afcd495fccab40b4c49f50862b034, type: 3}
     count: 1
+    initialCount: 1
   spawnDuration: 30

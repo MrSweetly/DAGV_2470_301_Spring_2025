@@ -4,6 +4,22 @@ public class BuildManager : MonoBehaviour
 {
     public static BuildManager instance;
 
+    public GameObject rifleTurretPrefab;
+    public GameObject sniperTurretPrefab;
+    public GameObject barricadeTowerPrefab;
+
+    public NodeUI nodeUI;
+    private GameObject turretToBuild;
+    private NodeControl selectedNode;
+
+    public GameObject cancelButton;
+
+    public GameObject rifleButton;
+    public GameObject sniperButton;
+    public GameObject barricadeButton;
+
+    private RectTransform selectedButtonRectTransform;
+
     void Awake()
     {
         if (instance != null)
@@ -14,30 +30,7 @@ public class BuildManager : MonoBehaviour
         instance = this;
     }
 
-    public GameObject rifleTurretPrefab;
-    public GameObject sniperTurretPrefab;
-    public GameObject barricadeTowerPrefab;
-    
-    public NodeUI nodeUI;
-
-    private GameObject turretToBuild;
-    private NodeControl selectedNode;
-
-    // Reference to the Cancel button UI
-    public GameObject cancelButton;
-
-    // Reference to turret selection buttons
-    public GameObject rifleButton;
-    public GameObject sniperButton;
-    public GameObject barricadeButton;
-
-    // Store the RectTransform of the selected button for positioning
-    private RectTransform selectedButtonRectTransform;
-
-    public GameObject GetTurretToBuild()
-    {
-        return turretToBuild;
-    }
+    public GameObject GetTurretToBuild() => turretToBuild;
 
     public void SelectNode(NodeControl node)
     {
@@ -46,11 +39,16 @@ public class BuildManager : MonoBehaviour
             DeselectNode();
             return;
         }
-        
+
         selectedNode = node;
         turretToBuild = null;
-
         nodeUI.SetTarget(node);
+
+        // Trigger blinking effect on all nodes
+        foreach (var n in FindObjectsOfType<NodeControl>())
+        {
+            n.StartBlinking();
+        }
     }
 
     public void DeselectNode()
@@ -68,23 +66,7 @@ public class BuildManager : MonoBehaviour
         if (cancelButton != null)
         {
             cancelButton.SetActive(turret != null);
-
-            // Set the Cancel button's position based on the selected turret button
-            if (turret != null)
-            {
-                if (turret == rifleTurretPrefab)
-                {
-                    SetCancelButtonPosition(rifleButton);
-                }
-                else if (turret == sniperTurretPrefab)
-                {
-                    SetCancelButtonPosition(sniperButton);
-                }
-                else if (turret == barricadeTowerPrefab)
-                {
-                    SetCancelButtonPosition(barricadeButton);
-                }
-            }
+            SetCancelButtonPosition(turret);
         }
     }
 
@@ -92,29 +74,30 @@ public class BuildManager : MonoBehaviour
     {
         turretToBuild = null;
 
-        // Hide Cancel button when canceling
         if (cancelButton != null)
         {
             cancelButton.SetActive(false);
         }
 
         // Disable blinking effect on all nodes
-        GameObject nodesParent = GameObject.Find("Nodes");
-        if (nodesParent != null)
+        foreach (var node in FindObjectsOfType<NodeControl>())
         {
-            NodeControl[] nodes = nodesParent.GetComponentsInChildren<NodeControl>();
-            foreach (NodeControl node in nodes)
-            {
-                node.StopBlinking();
-            }
+            node.StopBlinking();
         }
 
         Debug.Log("Turret selection canceled.");
     }
 
-    // Method to set Cancel button position based on the turret button selected
-    private void SetCancelButtonPosition(GameObject turretButton)
+    private void SetCancelButtonPosition(GameObject turret)
     {
+        if (turret == null || cancelButton == null) return;
+
+        // Use the selected turret button for positioning
+        GameObject turretButton = null;
+        if (turret == rifleTurretPrefab) turretButton = rifleButton;
+        else if (turret == sniperTurretPrefab) turretButton = sniperButton;
+        else if (turret == barricadeTowerPrefab) turretButton = barricadeButton;
+
         if (turretButton != null)
         {
             selectedButtonRectTransform = turretButton.GetComponent<RectTransform>();

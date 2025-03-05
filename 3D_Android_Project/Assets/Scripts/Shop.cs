@@ -2,51 +2,47 @@ using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
-    BuildManager buildManager;
+    private BuildManager buildManager;
+    private NodeControl[] nodes; // Cached list of nodes to avoid redundant GameObject.Find calls
 
     void Start()
     {
-        if (BuildManager.instance == null)
+        buildManager = BuildManager.instance;
+        if (buildManager == null)
         {
             Debug.LogError("BuildManager instance is missing!");
+            return;
         }
-        buildManager = BuildManager.instance;
+
+        // Cache all nodes at start instead of calling GameObject.Find each time
+        GameObject nodesParent = GameObject.Find("Nodes");
+        if (nodesParent != null)
+        {
+            nodes = nodesParent.GetComponentsInChildren<NodeControl>();
+        }
+        else
+        {
+            Debug.LogError("No Nodes parent found in the scene!");
+        }
     }
 
-    public void BuyRifleTurret()
+    public void BuyTurret(GameObject turretPrefab)
     {
-        Debug.Log("BuyRifleTurret");
-        buildManager.SetTurretToBuild(buildManager.rifleTurretPrefab);
-        EnableNodeBlinking(); // Enable blinking on all nodes
-    }
+        if (turretPrefab == null)
+        {
+            Debug.LogError("Turret prefab is null!");
+            return;
+        }
 
-    public void BuySniperTurret()
-    {
-        Debug.Log("BuySniperTurret");
-        buildManager.SetTurretToBuild(buildManager.sniperTurretPrefab);
-        EnableNodeBlinking(); // Enable blinking on all nodes
-    }
-
-    public void BuyBarricadeTower()
-    {
-        Debug.Log("BuyBarricadeTower");
-        buildManager.SetTurretToBuild(buildManager.barricadeTowerPrefab);
-        EnableNodeBlinking(); // Enable blinking on all nodes
+        Debug.Log($"Buying {turretPrefab.name}");
+        buildManager.SetTurretToBuild(turretPrefab);
+        EnableNodeBlinking();
     }
 
     private void EnableNodeBlinking()
     {
-        GameObject nodesParent = GameObject.Find("Nodes"); // Find the "Nodes" parent object in the scene
-        if (nodesParent == null)
-        {
-            Debug.LogError("No Nodes parent found in the scene!");
-            return;
-        }
+        if (nodes == null || nodes.Length == 0) return; // No nodes found
 
-        // Find all NodeControl components in the children of the "Nodes" parent object
-        NodeControl[] nodes = nodesParent.GetComponentsInChildren<NodeControl>();
-
-        // Stop any ongoing blinking for all nodes before re-triggering blinking
         foreach (NodeControl node in nodes)
         {
             node.StopBlinking(); // Stop previous blinking
